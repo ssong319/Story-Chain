@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <title>Story Chain App</title>
+    <script src="react/build/react.js"></script>
+    <script src="react/build/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
+</head>
+
+
+<body>
+    <div id="story-app"></div>
+    <script type="text/babel">
+     
+        var box = document.getElementById('story-app');
+
+        class StoryUnit extends React.Component {
+            render() {
+                return (
+                    <div className="story-unit">
+                    <p className="author"> {this.props.author} </p>
+                    <p className="story-content"> {this.props.content} </p>
+                    </div>
+                    );
+            }
+        }
+
+        class StoryBox extends React.Component {
+            render() {
+                const storyunits = this._getStoryUnits();
+                return (
+                    <div className="outer-box"> Story Box
+                        <div className="story-unit">
+                            { storyunits }
+                        </div>
+                    </div>
+                    );
+            }
+
+            _getStoryUnits() {
+                const units = [{id: 1, author: 'Stephanie Song', storytext: 'There once was a girl named Sophie.'}, {id: 2, author: 'Jane Doe', storytext: 'Who lived in a castle far far away.'}, {id: 3, author: 'Riley Smith', storytext: 'She lived with three brothers and sisters'}];
+
+                return units.map( (unit) => { return (<StoryUnit author={unit.author} content={unit.storytext} key={unit.id} />); } );
+            }
+        }
+
+        ReactDOM.render(<StoryBox />, box);
+    </script>
+
+
+</body>
+
+
+</html>
