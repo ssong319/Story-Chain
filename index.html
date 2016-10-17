@@ -15,13 +15,37 @@
         var box = document.getElementById('story-app');
 
         class StoryUnit extends React.Component {
+
+            constructor() {
+                super();
+                this.state = {
+                    isDownvoted: false
+                };
+            }
+
             render() {
+                var commentBody;
+
+                if (!this.state.isDownvoted) {
+                    commentBody = this.props.content;
+                } else {
+                    commentBody = <em> Content downvoted </em>;
+                }
+
                 return (
                     <div className="story-unit">
                     <p className="author"> {this.props.author} </p>
-                    <p className="story-content"> {this.props.content} </p>
+                    <p className="story-content"> {commentBody} </p>
+                    <button onClick={this._handleDownvote.bind(this)}>Down vote</button>
                     </div>
                     );
+            }
+
+            _handleDownvote(event) {
+                event.preventDefault();
+                this.setState({
+                    isDownvoted: !this.state.isDownvoted
+                });
             }
         }
 
@@ -29,7 +53,8 @@
             render() {
                 const storyunits = this._getStoryUnits();
                 return (
-                    <div className="outer-box"> Story Box
+                    <div className="outer-box"> <h1> Story Box </h1>
+                        <h3> Story Progress: { this._getProgressCount(storyunits.length) } </h3>
                         <div className="story-unit">
                             { storyunits }
                         </div>
@@ -41,6 +66,18 @@
                 const units = [{id: 1, author: 'Stephanie Song', storytext: 'There once was a girl named Sophie.'}, {id: 2, author: 'Jane Doe', storytext: 'Who lived in a castle far far away.'}, {id: 3, author: 'Riley Smith', storytext: 'She lived with three brothers and sisters'}];
 
                 return units.map( (unit) => { return (<StoryUnit author={unit.author} content={unit.storytext} key={unit.id} />); } );
+            }
+
+            _getProgressCount(unitCount) {
+                if (unitCount == 0) {
+                    return 'This story has no units yet';
+                } else if (unitCount == 1) {
+                    return 'This story has one unit';
+                } else {
+                    //ES6 string substitution `str...${var}..`
+                    return `${unitCount} comments`;
+                }
+
             }
         }
 
